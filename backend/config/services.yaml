@@ -24,3 +24,27 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    # Repository services
+    App\Repository\MovieRepository:
+        factory: ['@doctrine_mongodb.odm.document_manager', 'getRepository']
+        arguments: ['App\Document\Movie']
+
+    App\Repository\GameSessionRepository:
+        factory: ['@doctrine_mongodb.odm.document_manager', 'getRepository']
+        arguments: ['App\Document\GameSession']
+
+    App\Repository\ScoreRepository:
+        factory: ['@doctrine_mongodb.odm.document_manager', 'getRepository']
+        arguments: ['App\Document\Score']
+
+    # TMDB Service configuration
+    App\Service\TmdbService:
+        arguments:
+            $tmdbApiKey: '%env(TMDB_API_KEY)%'
+            $tmdbBaseUrl: '%env(TMDB_BASE_URL)%'
+            $tmdbImageBaseUrl: '%env(TMDB_IMAGE_BASE_URL)%'
+    # Movie Service configuration
+    App\Service\MovieService:
+        arguments:
+            $movieRepository: '@App\Repository\MovieRepository'
